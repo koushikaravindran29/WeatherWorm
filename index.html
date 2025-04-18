@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            text-align: center;
+            padding: 50px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            margin: auto;
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background: blue;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: darkblue;
+        }
+        #weather-result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Weather App</h1>
+        <input type="text" id="city" placeholder="Enter city name">
+        <button onclick="getWeather()">Get Weather</button>
+
+        <div id="weather-result"></div>
+    </div>
+
+    <script>
+        function getWeather() {
+            const city = document.getElementById('city').value.trim();
+
+            if (city === "") {
+                document.getElementById('weather-result').innerHTML = 
+                    "<p style='color:red;'>Please enter a city name!</p>";
+                return;
+            }
+
+            fetch(`http://localhost:8080/weather?city=${city}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('City not found. Please try again.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById('weather-result').innerHTML = `
+                        <h3>Weather in ${data.city}</h3>
+                        <p>Temperature: ${data.temperature}</p>
+                        <p>Condition: ${data.condition}</p>
+                    `;
+                })
+                .catch(error => {
+                    document.getElementById('weather-result').innerHTML = 
+                        "<p style='color:red;'>Error fetching weather data!</p>";
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+
+</body>
+</html>
