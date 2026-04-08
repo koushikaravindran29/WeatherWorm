@@ -179,12 +179,6 @@ button:hover {
         userMessage.textContent = district;
         chatBox.appendChild(userMessage);
     
-        // Special Case
-        if (district.toLowerCase() === "kimtaehyung'swife") {
-            displayBotMessage("Lurshiya");
-            resetInput(districtInput);
-            return;
-        }
     
         try {
             const response = await fetch(`http://localhost:8080/api/crops/district/${district}`);
